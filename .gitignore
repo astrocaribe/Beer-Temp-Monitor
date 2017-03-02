@@ -1,0 +1,8 @@
+bin/
+build/
+dist/
+include/
+lib/
+local/
+pip-selfcheck.json
+config/config.json

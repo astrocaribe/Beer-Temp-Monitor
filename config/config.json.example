@@ -1,0 +1,7 @@
+{
+  "service": {
+    "host":"some_host",
+    "port":"some_port",
+    "route":"/temperature"
+  }
+}
