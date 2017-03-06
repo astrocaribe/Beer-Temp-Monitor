@@ -5,14 +5,22 @@ import requests
 import json
 
 
-# Convert celcius to fahrenheit
-def c_to_f(c):
-    return c * 9.0 / 5.0 + 32.0
-
-
+# ************************** SENSOR INIT **************************
 # Initialize the sensor
 temp_sensor = MCP9808.MCP9808()
 temp_sensor.begin()
+
+
+# ************************** CONSTANT **************************
+location = [36.1388, -86.8426]    # Location
+interval = 300                    # Rerading frequency, in seconds
+
+
+# ************************** FUNCTIONS **************************
+
+# Convert celcius to fahrenheit
+def c_to_f(c):
+    return c * 9.0 / 5.0 + 32.0
 
 
 # Return external service url/port
@@ -52,8 +60,7 @@ def read_temp(loc):
     return room_temp, weather_temp, read_time
 
 
-def post_temp(loc):
-
+def post_temp(loc, time_int):
     url = returnHost()
 
     while True:
@@ -73,13 +80,15 @@ def post_temp(loc):
             response_msg = json.loads(r.text)
 
             print('Room: {0:.3f}*F - Weather: {1:.3f}*F - Time: {2} - Status: {3}'.format(c_to_f(r_temp), w_temp, r_time, response_msg['message']))
-            time.sleep(interval)
+            time.sleep(time_int)
 
 
-# ------------- Main -------------
-# Loop printing measurements every x minutes
-location = [36.1388, -86.8426]    # Location
-interval = 300                    # Rerading frequency, in seconds
+def main(loc, time_int):
+    # Loop printing measurements every x minutes
 
-print('Press Ctrl+C to quit.')
-post_temp(location)
+    print('Press Ctrl+C to quit.')
+
+    post_temp(loc, time_int)
+
+if __name__ == "__main__":
+    main(location, interval)
