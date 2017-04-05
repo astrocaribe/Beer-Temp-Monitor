@@ -55,7 +55,7 @@ def read_temp(loc):
     room_temp = temp_sensor.readTempC()
     weather_temp = local_weather(loc)
     # weather_temp = 65.09
-    read_time = dt.utcnow()
+    read_time = dt.utcnow().isoformat(' ')
 
     return room_temp, weather_temp, read_time
 
@@ -65,7 +65,7 @@ def post_temp(loc, time_int):
 
     while True:
         r_temp, w_temp, r_time = read_temp(loc)
-        payload = {"room": c_to_f(r_temp), "weather": w_temp}
+        payload = {"room": c_to_f(r_temp), "weather": w_temp, "time": r_time}
         headers = {'Content-Type': 'application/json'}
 
         try:
