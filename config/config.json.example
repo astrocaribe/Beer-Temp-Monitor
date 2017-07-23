@@ -3,5 +3,10 @@
     "host":"some_host",
     "port":"some_port",
     "route":"/temperature"
+  },
+  "logger": {
+    "path":"/some_path",
+    "when":"d",
+    "interval":1
   }
 }
