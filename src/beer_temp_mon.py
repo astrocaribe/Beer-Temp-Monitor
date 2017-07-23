@@ -72,7 +72,6 @@ def read_temp(loc):
     weather_temp = local_weather(loc)
     # weather_temp = 65.09
     read_time = dt.utcnow().isoformat(' ')
-
     return room_temp, weather_temp, read_time
 
 
@@ -87,6 +86,7 @@ def post_temps(loc, time_int):
         try:
             r = requests.post(url, headers=headers, data=json.dumps(payload))
         except requests.exceptions.ConnectionError:
+
             logger.error('Connection refused. Please check that service is running.')
             return False
         except Exception as e:
@@ -94,7 +94,6 @@ def post_temps(loc, time_int):
             return False
         else:
             response_msg = json.loads(r.text)
-
             logger.info('Room: {0:.3f}*F - Weather: {1:.3f}*F - Time: {2} - Status: {3}'.format(c_to_f(r_temp), w_temp, r_time, response_msg['message']))
             time.sleep(time_int)
 
@@ -104,7 +103,6 @@ def main(loc, time_int):
 
     # Read and post tempetatures to API evey time_int
     post_temps(loc, time_int)
-
 
 if __name__ == "__main__":
     main(location, interval)
