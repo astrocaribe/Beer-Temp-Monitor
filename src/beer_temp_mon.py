@@ -10,7 +10,7 @@ import json
 logger = logging.getLogger()
 
 streamHandler = logging.StreamHandler()
-fileHandler = logging.FileHandler('logs/error.log', mode='a')
+fileHandler = logging.FileHandler('logs/b-monitor.log', mode='a')
 formatter = logging.Formatter(
                         '%(asctime)s %(name)-2s %(levelname)-5s %(message)s')
 streamHandler.setFormatter(formatter)
@@ -24,7 +24,7 @@ logger.setLevel(logging.INFO)
 with open('config/config.json') as jsonConfig:
     configData = json.load(jsonConfig)
     host = configData['service']['host']
-    port = configData['service']['port']
+    # port = configData['service']['port']
     route = configData['service']['route']
 
     log_path = configData['logger']['path']
@@ -76,7 +76,8 @@ def read_temp(loc):
 
 
 def post_temps(loc, time_int):
-    url = host + ':' + port + route
+    # url = host + ':' + port + route
+    url = host + route
 
     while True:
         r_temp, w_temp, r_time = read_temp(loc)
@@ -85,9 +86,11 @@ def post_temps(loc, time_int):
 
         try:
             r = requests.post(url, headers=headers, data=json.dumps(payload))
+            if r.status_code == 503:
+                logger.error('Service may be unavailable. Please try again shortly!')
+                return False
         except requests.exceptions.ConnectionError:
-
-            logger.error('Connection refused. Please check that service is running.')
+            logger.error('Connection refused. Please check that service is running.', ' url: ', url)
             return False
         except Exception as e:
             logger.error('Unspecified error.', e)
