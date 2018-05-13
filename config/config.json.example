@@ -8,5 +8,8 @@
     "path":"/some_path",
     "when":"d",
     "interval":1
+  },
+  "slack": {
+    "slack_url":"slack-url.com/webhook-url"
   }
 }

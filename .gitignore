@@ -6,6 +6,7 @@ lib/
 local/
 pip-selfcheck.json
 config/config.json
+config/config-old.json
 .cache
 man/
 *.pyc
