@@ -128,7 +128,8 @@ def post_temps(loc, time_int):
                                                                                             r_time,
                                                                                             response_msg['message']))
             elif status == 503:
-                unavailable_msg = 'Service may be unavailable. Please check and try again shortly!'
+                unavailable_msg = 'Service may be unavailable. Please check and try again shortly! Status: {}'.format(
+                    status)
                 post_to_slack(slack_url, unavailable_msg)
                 logger.error(unavailable_msg)
 
