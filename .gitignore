@@ -11,3 +11,4 @@ config/config-old.json
 man/
 *.pyc
 .idea/
+env
