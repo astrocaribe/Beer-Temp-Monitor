@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-COMMAND='python src/beer_temp_monitor.py'
-LOGFILE='logs/restart.txt'
+COMMAND='python /home/pi/repos/Beer-Temp-Monitor/src/beer_temp_mon.py'
+LOGFILE='restart.txt'
 
 writelog() {
     now=`date`

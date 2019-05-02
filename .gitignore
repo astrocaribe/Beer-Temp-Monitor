@@ -12,3 +12,6 @@ man/
 *.pyc
 .idea/
 env
+logs/
+restart.txt
+venv/
