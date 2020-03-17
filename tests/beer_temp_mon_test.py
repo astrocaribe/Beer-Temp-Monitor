@@ -1,5 +1,6 @@
 from mock import MagicMock
 import sys
+import unittest
 sys.path.append('./src/')
 
 from beer_temp_mon import c_to_f, local_weather
