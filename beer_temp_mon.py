@@ -6,6 +6,8 @@ import requests
 import json
 import sys
 
+from helpers import utils
+
 # ************************** LOGGING **************************
 logger = logging.getLogger()
 
@@ -45,9 +47,9 @@ interval = 300  # Reading frequency, in seconds
 
 # ************************** FUNCTIONS **************************
 
-# Convert celcius to fahrenheit
-def c_to_f(c):
-    return c * 9.0 / 5.0 + 32.0
+# # Convert celcius to fahrenheit
+# def c_to_f(c):
+#     return c * 9.0 / 5.0 + 32.0
 
 
 def post_to_slack(url, msg):
@@ -67,27 +69,27 @@ def post_to_slack(url, msg):
 
 
 # Retrieve local weather information
-def local_weather(loc):
-    key = "a7c0eba6c07ac8d3bc2f81535bcf8592"
-    url = "https://api.darksky.net/forecast/{0}/{1:.4f},{2:.4f}?exclude=[minutely,hourly,daily,alerts,flags]".format(
-        key, loc[0], loc[1])
-    headers = {'Content-Type': 'application/json'}
+# def local_weather(loc):
+#     key = "a7c0eba6c07ac8d3bc2f81535bcf8592"
+#     url = "https://api.darksky.net/forecast/{0}/{1:.4f},{2:.4f}?exclude=[minutely,hourly,daily,alerts,flags]".format(
+#         key, loc[0], loc[1])
+#     headers = {'Content-Type': 'application/json'}
 
-    try:
-        resp = requests.get(url, headers=headers)
-    except Exception as e:
-        logger.error('Unspecified error. Please check DarkSky availability.', e)
-        local_temp = 0
-    else:
-        response_msg = json.loads(resp.text)
-        local_temp = response_msg['currently']['temperature']
+#     try:
+#         resp = requests.get(url, headers=headers)
+#     except Exception as e:
+#         logger.error('Unspecified error. Please check DarkSky availability.', e)
+#         local_temp = 0
+#     else:
+#         response_msg = json.loads(resp.text)
+#         local_temp = response_msg['currently']['temperature']
 
-    return local_temp
+#     return local_temp
 
 
 def read_temp(loc):
     room_temp = temp_sensor.readTempC()
-    weather_temp = local_weather(loc)
+    weather_temp = utils.local_weather(loc, logger)
     # weather_temp = 65.09
     read_time = dt.utcnow().isoformat(' ')
     return room_temp, weather_temp, read_time
@@ -100,7 +102,7 @@ def post_temps(loc, time_int):
 
     while True:
         r_temp, w_temp, r_time = read_temp(loc)
-        payload = {"room": c_to_f(r_temp), "weather": w_temp, "time": r_time}
+        payload = {"room": utils.c_to_f(r_temp), "weather": w_temp, "time": r_time}
         headers = {'Content-Type': 'application/json'}
 
         try:
@@ -124,7 +126,7 @@ def post_temps(loc, time_int):
             if status == 200:
                 response_msg = json.loads(r.text)
                 logger.info(
-                    'Room: {0:.3f}*F - Weather: {1:.3f}*F - Time: {2} - Status: {3}'.format(c_to_f(r_temp), w_temp,
+                    'Room: {0:.3f}*F - Weather: {1:.3f}*F - Time: {2} - Status: {3}'.format(utils.c_to_f(r_temp), w_temp,
                                                                                             r_time,
                                                                                             response_msg['message']))
             elif status == 503:

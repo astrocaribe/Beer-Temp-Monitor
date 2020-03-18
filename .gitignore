@@ -15,3 +15,5 @@ env
 logs/
 restart.txt
 venv/
+.vscode
+__pycache__
