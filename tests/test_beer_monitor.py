@@ -23,6 +23,18 @@ class TestLocalWeather(unittest.TestCase):
 
             self.assertEqual(response, 70.13)
 
+        # with patch('requests.get') as mock_get:
+        #     with self.assertRaises(Exception) as context:
+        
+        #         # Configure the mock to return a response with an OK status code.
+        #         mock_get.return_value.ok = True
+        #         # mock_get.return_value.text = json.dumps(raise Exception('Some exception'))
+
+        #         # Call the service, which will send a request to the server.
+        #         response = utils.local_weather([12, 12], 'sample')
+
+        #         self.assertTrue(response, context.exception)
+
 
 if __name__ == '__main__':
     unittest.main()
