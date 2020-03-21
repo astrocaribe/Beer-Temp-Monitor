@@ -17,3 +17,4 @@ restart.txt
 venv/
 .vscode
 __pycache__
+tmp/

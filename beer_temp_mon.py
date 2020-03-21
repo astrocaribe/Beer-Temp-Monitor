@@ -1,7 +1,10 @@
 import time
 import logging
 from datetime import datetime as dt
-import Adafruit_MCP9808.MCP9808 as MCP9808
+import board
+import busio
+import adafruit_mcp9808
+# import Adafruit_MCP9808.MCP9808 as MCP9808
 import requests
 import json
 import sys
@@ -36,9 +39,12 @@ with open('config/config.json') as jsonConfig:
     log_int = configData['logger']['interval']
 
 # ************************** SENSOR INIT **************************
-# Initialize the sensor
-temp_sensor = MCP9808.MCP9808()
-temp_sensor.begin()
+i2c = busio.I2C(board.SCL, board.SDA)
+mcp = adafruit_mcp9808.MCP9808(i2c)
+
+# # Initialize the sensor
+# temp_sensor = MCP9808.MCP9808()
+# temp_sensor.begin()
 
 # ************************** CONSTANTS **************************
 location = [36.1388, -86.8426]  # Location
@@ -88,7 +94,7 @@ def post_to_slack(url, msg):
 
 
 def read_temp(loc):
-    room_temp = temp_sensor.readTempC()
+    room_temp = mcp.temperature
     weather_temp = utils.local_weather(loc, logger)
     # weather_temp = 65.09
     read_time = dt.utcnow().isoformat(' ')
