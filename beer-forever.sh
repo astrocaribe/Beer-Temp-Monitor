@@ -1,6 +1,6 @@
 #!/bin/sh
 
-COMMAND='python /home/pi/repos/Beer-Temp-Monitor/src/beer_temp_mon.py'
+COMMAND='python /home/pi/repos/Beer-Temp-Monitor/beer_temp_mon.py'
 LOGFILE='restart.txt'
 
 writelog() {

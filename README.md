@@ -1,3 +1,5 @@
+![Python application](https://github.com/astrocaribe/Beer-Temp-Monitor/workflows/Python%20application/badge.svg?branch=astrocaribe-patch-1)
+
 # Beer Temperature Monitor
 
 A Python service that relays a Raspberry Pi temperature to an external service for processing.
