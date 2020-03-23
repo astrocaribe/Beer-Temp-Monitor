@@ -8,8 +8,13 @@ import adafruit_mcp9808
 import requests
 import json
 import sys
+from gpiozero import LED
 
 from helpers import utils
+
+
+led = LED(18)
+led.on()
 
 # ************************** LOGGING **************************
 logger = logging.getLogger()
@@ -114,28 +119,33 @@ def post_temps(loc, time_int):
         try:
             r = requests.post(url, headers=headers, data=json.dumps(payload))
         except requests.exceptions.ConnectionError:
+            led.blink()
             connection_msg = 'Connection refused. Please check that service is running.'
             post_to_slack(slack_url, connection_msg)
             logger.error(connection_msg, ' url: ', url)
             time.sleep(time_int)
         except Exception as e:
+            led.blink()
             unspecified_msg = 'Unspecified error. Please check the logs.'
             post_to_slack(slack_url, unspecified_msg)
             logger.error(unspecified_msg, e)
             sys.exit(0)
         except KeyboardInterrupt:
+            led.off()
             logger.info('Ctrl-C detected. Shutting down ...')
             sys.exit(0)
         else:
             status = r.status_code
 
             if status == 200:
+                led.on()
                 response_msg = json.loads(r.text)
                 logger.info(
                     'Room: {0:.3f}*F - Weather: {1:.3f}*F - Time: {2} - Status: {3}'.format(utils.c_to_f(r_temp), w_temp,
                                                                                             r_time,
                                                                                             response_msg['message']))
             elif status == 503:
+                led.blink()
                 unavailable_msg = 'Service may be unavailable. Please check and try again shortly! Status: {}'.format(
                     status)
                 post_to_slack(slack_url, unavailable_msg)
